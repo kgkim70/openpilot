@@ -1045,7 +1045,7 @@ static void ui_draw_vision_header(UIState *s) {
   ui_draw_vision_speedlimit(s);
 #endif
   ui_draw_vision_speed(s);
-  //ui_draw_vision_event(s);
+  ui_draw_vision_event(s);
 }
 
 static int bb_ui_draw_measure(UIState *s,  const char* bb_value, const char* bb_uom, const char* bb_label,
@@ -1072,7 +1072,7 @@ static int bb_ui_draw_measure(UIState *s,  const char* bb_value, const char* bb_
   if (strlen(bb_uom) > 0) {
       nvgSave(s->vg);
     int rx =bb_x + bb_uom_dx + bb_valueFontSize -3;
-    int ry = bb_y + (int)(bb_valueFontSize*2.5/2)+25;
+    int ry = bb_y + (int)(bb_valueFontSize*2.5/2)+15; //25;
     nvgTranslate(s->vg,rx,ry);
     nvgRotate(s->vg, -1.5708); //-90deg in radians
     nvgFontFace(s->vg, "sans-regular");
@@ -1116,7 +1116,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
        snprintf(val_str, sizeof(val_str), "-");
     }
     snprintf(uom_str, sizeof(uom_str), "m   ");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REL DIST",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "상대거리", //"REL DIST",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1151,7 +1151,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
     } else {
       snprintf(uom_str, sizeof(uom_str), "mph");
     }
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REL SPEED",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "상대속도", //"REL SPEED",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1175,7 +1175,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
       snprintf(val_str, sizeof(val_str), "%.1f°",(scene->angleSteers));
 
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "REAL STEER",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "현재조향", //"REAL STEER",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1202,7 +1202,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
        snprintf(val_str, sizeof(val_str), "-");
     }
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "DESIR STEER",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "자율조향", //"DESIR STEER",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1247,7 +1247,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
       // temp is alway in C * 10
       snprintf(val_str, sizeof(val_str), "%d°C", (int)(scene->cpuTemp/10));
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU TEMP",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU 온도", //"CPU TEMP",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1267,7 +1267,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
       }
       snprintf(val_str, sizeof(val_str), "%d%%", (int)(scene->cpuPerc));
       snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU USAGE",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU 사용", //"CPU USAGE",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1288,7 +1288,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     // temp is alway in C * 1000
     snprintf(val_str, sizeof(val_str), "%d°C", (int)(scene->maxBatTemp/1000));
     snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "BAT TEMP",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "배터리온도", //"BAT TEMP",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1321,9 +1321,13 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     close(fd);
 //   snprintf(battery_str, sizeof(battery_str), "%d%%%s", s->scene.batteryPercent, strcmp(s->scene.batteryStatus, "Charging") == 0 ? "+" : "-");
 
-    snprintf(val_str, sizeof(val_str), "%s%%%s", bat_lvl,strcmp(scene->batteryStatus, "Charging") == 0 ? "+" : "-");
+    //snprintf(val_str, sizeof(val_str), "%s%%%s", bat_lvl,strcmp(scene->batteryStatus, "Charging") == 0 ? "+" : "-");
+    snprintf(val_str, sizeof(val_str), "%s%%", bat_lvl);
+    if(strcmp(scene->batteryStatus, "Charging") == 0) {
+      val_color = nvgRGBA(0, 255, 0, 200);
+    }
     snprintf(uom_str, sizeof(uom_str), "");
-    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "BAT LVL",
+    bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "배터리충전", //"BAT LVL",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
@@ -1410,11 +1414,11 @@ static void bb_ui_draw_UI(UIState *s)
   const UIScene *scene = &s->scene;
   const int bb_dml_w = 180;
   const int bb_dml_x = (scene->ui_viz_rx + (bdr_is * 2));
-  const int bb_dml_y = (box_y + (bdr_is * 1.5)) + 220;
+  const int bb_dml_y = (box_y + (bdr_is * 1.5)) + 250;
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = scene->ui_viz_rx + scene->ui_viz_rw - bb_dmr_w - (bdr_is * 2);
-  const int bb_dmr_y = (box_y + (bdr_is * 1.5)) + 100;
+  const int bb_dmr_y = (box_y + (bdr_is * 1.5)) + 250;
 
   bb_ui_draw_measures_right(s, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y, bb_dmr_w);
