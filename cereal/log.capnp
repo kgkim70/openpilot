@@ -294,6 +294,8 @@ struct ThermalData {
   networkStrength @24 :NetworkStrength;
   carBatteryCapacity @25 :UInt32;  # Estimated remaining car battery capacity in uWh
 
+  wifiIpAddress @31 :Text;
+
   fanSpeed @10 :UInt16;
   started @11 :Bool;
   startedTs @13 :UInt64;
