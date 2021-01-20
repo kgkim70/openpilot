@@ -12,3 +12,8 @@ If you wish you can buy me a beer or 3:  https://www.patreon.com/kegman
 
 rkjnice@gmail.com
 
+
+*
+- 양민님 포크에서 이벤트 메시지를 한글화 한 포크입니다
+- 항상 감사드립니다 (Thanks for https://github.com/jc01rho-openpilot-BoltEV2019-KoKr/openpilot)
+*
